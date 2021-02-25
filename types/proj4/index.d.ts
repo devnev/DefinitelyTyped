@@ -5,7 +5,7 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 declare namespace proj4 {
-    type TemplateCoordinates = number[] | InterfaceCoordinates;
+    type TemplateCoordinates = [number, number] | [number, number, number] | number[] | InterfaceCoordinates;
 
     interface InterfaceCoordinates {
         x: number;
@@ -35,8 +35,8 @@ declare namespace proj4 {
         es: number;
         e: number;
         ep2: number;
-        forward(coordinates: TemplateCoordinates): number[];
-        inverse(coordinates: TemplateCoordinates): number[];
+        forward<T extends InterfaceCoordinates>(coordinates: T): T;
+        inverse<T extends InterfaceCoordinates>(coordinates: T): T;
     }
 
     interface ProjectionDefinition {
@@ -76,7 +76,7 @@ declare namespace proj4 {
 
     function Proj(srsCode: any, callback?: any): InterfaceProjection;
 
-    const WGS84: any;
+    const WGS84: InterfaceProjection;
 
     /**
      * @deprecated v3
@@ -93,23 +93,26 @@ declare namespace proj4 {
     function transform(
         source: InterfaceProjection,
         dest: InterfaceProjection,
-        point: TemplateCoordinates
-    ): any;
+        point: TemplateCoordinates,
+    ): InterfaceCoordinates;
 
     function mgrs(coordinates: number[], accuracy: number): string;
 
     const version: string;
 }
 
-declare function proj4(fromProjection: string, toProjection?: string): proj4.Converter;
+declare function proj4(
+    fromProjection: string | proj4.InterfaceProjection,
+    toProjection?: string | proj4.InterfaceProjection,
+): proj4.Converter;
 declare function proj4<T extends proj4.TemplateCoordinates>(
-    toProjection: string,
-    coordinates: T
+    toProjection: string | proj4.InterfaceProjection,
+    coordinates: T,
 ): T;
 declare function proj4<T extends proj4.TemplateCoordinates>(
-    fromProjection: string,
-    toProjection: string,
-    coordinates: T
+    fromProjection: string | proj4.InterfaceProjection,
+    toProjection: string | proj4.InterfaceProjection,
+    coordinates: T,
 ): T;
 
 export = proj4;

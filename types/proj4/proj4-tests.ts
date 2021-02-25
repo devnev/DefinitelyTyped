@@ -11,6 +11,7 @@ const firstProjection = epsg[4269];
 const secondProjection = epsg[4326];
 
 const pointArr = [-71, 41];
+const pointTup: [number, number] = [14, 17];
 const pointObj = { x: 2, y: 5 };
 
 ///////////////////////////////////////////
@@ -21,11 +22,15 @@ proj4(firstProjection, pointArr);
 
 // $ExpectType number[]
 proj4(firstProjection, secondProjection, pointArr);
+// $ExpectType [number, number]
+proj4(firstProjection, secondProjection, pointTup);
 // $ExpectType { x: number; y: number; }
 proj4(firstProjection, secondProjection, pointObj);
 
 // $ExpectType number[]
 proj4(firstProjection, pointArr);
+// $ExpectType [number, number]
+proj4(firstProjection, pointTup);
 // $ExpectType { x: number; y: number; }
 proj4(firstProjection, pointObj);
 
@@ -51,7 +56,11 @@ proj4(firstProjection, secondProjection).inverse(pointObj);
 proj4.defs('WGS84');
 proj4.defs('WGS84', secondProjection);
 // $ExpectType undefined[]
-proj4.defs([['EPSG:4326', secondProjection], ['EPSG:4269', firstProjection]]);
+proj4.defs([
+    ['EPSG:4326', secondProjection],
+    ['EPSG:4269', firstProjection],
+]);
+// $ExpectType void
 proj4.defs('urn:x-ogc:def:crs:EPSG:4326', proj4.defs('EPSG:4326'));
 
 ///////////////////////////////////
